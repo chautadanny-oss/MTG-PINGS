@@ -282,7 +282,8 @@ def build_free_alert(product):
                 {"name": "💰 Price",       "value": product["price"],    "inline": True},
                 {"name": "✅ Status",      "value": "IN STOCK",          "inline": True},
                 {"name": "📊 Stock Level", "value": "Limited",           "inline": True},
-                {"name": "🕐 Heads up",   "value": "This drop went live 30 minutes ago.", "inline": False},
+                {"name": "🕐 Heads up",   "value": "This drop went live 20 minutes ago.", "inline": False},
+                {"name": "🛒 Store Page", "value": f"[View Product]({product['url']})", "inline": False},
                 {
                     "name": "⚡ Want to be first next time?",
                     "value": "Upgrade to **Crew** — instant alerts + direct checkout links the second drops go live.\n👉 [Join Crew on MTGPings](https://whop.com/mtgpings)",
@@ -320,7 +321,7 @@ def run_once():
             send_webhook(WHOP_WEBHOOK_MTG_PREMIUM, build_crew_alert(product))
             send_webhook(ALERTS_FOR_CREW_DISCORD,  build_crew_alert(product))
             state[f"{pid}_free_send_at"] = time.time() + (30 * 60)
-            print(f"  [⏳] Free alert queued for 30 minutes")
+            print(f"  [⏳] Free alert queued for 20 minutes")
 
         # Send pending free alert if due — only if item is STILL in stock
         free_send_at = state.get(f"{pid}_free_send_at")
@@ -330,7 +331,7 @@ def run_once():
                 send_webhook(WHOP_WEBHOOK_MTG_FREE,    build_free_alert(product))
                 send_webhook(ALERTS_FOR_VAULT_DISCORD, build_free_alert(product))
             else:
-                print(f"  [⏳] Free alert cancelled — item sold out before 30 min mark")
+                print(f"  [⏳] Free alert cancelled — item sold out before 20 min mark")
             del state[f"{pid}_free_send_at"]
 
         state[pid] = status
